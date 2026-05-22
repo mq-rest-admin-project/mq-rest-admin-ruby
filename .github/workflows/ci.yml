@@ -31,7 +31,7 @@ jobs:
     with:
       language: ruby
       versions: ${{ inputs.ruby-versions || '["3.2", "3.3", "3.4"]' }}
-      container-suffix: ruby
+      container-suffix: base
       container-tag: 'latest'
 
   integration-tests:
@@ -74,7 +74,7 @@ jobs:
     with:
       language: ruby
       versions: ${{ inputs.ruby-versions || '["3.2", "3.3", "3.4"]' }}
-      container-suffix: ruby
+      container-suffix: base
       container-tag: 'latest'
 
   security:
@@ -83,7 +83,7 @@ jobs:
       language: ruby
       run-standards: ${{ inputs.run-release != 'false' }}
       run-security: ${{ inputs.run-security != 'false' }}
-      container-suffix: ruby
+      container-suffix: base
       container-tag: 'latest'
     permissions:
       contents: read
@@ -94,7 +94,7 @@ jobs:
     with:
       language: ruby
       versions: ${{ inputs.ruby-versions || '["3.2", "3.3", "3.4"]' }}
-      container-suffix: ruby
+      container-suffix: base
       container-tag: 'latest'
 
   version:
@@ -102,5 +102,5 @@ jobs:
     with:
       language: ruby
       run-release: ${{ inputs.run-release != 'false' }}
-      container-suffix: ruby
+      container-suffix: base
       container-tag: 'latest'
