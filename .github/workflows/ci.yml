@@ -31,6 +31,7 @@ jobs:
     with:
       language: ruby
       versions: ${{ inputs.ruby-versions || '["3.2", "3.3", "3.4"]' }}
+      container-suffix: ruby
 
   integration-tests:
     name: "test / integration / ${{ matrix.ruby-version }}"
@@ -88,6 +89,7 @@ jobs:
     with:
       language: ruby
       versions: ${{ inputs.ruby-versions || '["3.2", "3.3", "3.4"]' }}
+      container-suffix: ruby
 
   version:
     uses: vergil-project/vergil-actions/.github/workflows/ci-version-bump.yml@v2.0
