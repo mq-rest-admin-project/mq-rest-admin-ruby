@@ -31,6 +31,8 @@ jobs:
     with:
       language: ruby
       versions: ${{ inputs.ruby-versions || '["3.2", "3.3", "3.4"]' }}
+      container-suffix: ruby
+      container-tag: 'latest'
 
   integration-tests:
     name: "test / integration / ${{ matrix.ruby-version }}"
@@ -72,6 +74,8 @@ jobs:
     with:
       language: ruby
       versions: ${{ inputs.ruby-versions || '["3.2", "3.3", "3.4"]' }}
+      container-suffix: ruby
+      container-tag: 'latest'
 
   security:
     uses: vergil-project/vergil-actions/.github/workflows/ci-security.yml@v2.0
@@ -79,6 +83,8 @@ jobs:
       language: ruby
       run-standards: ${{ inputs.run-release != 'false' }}
       run-security: ${{ inputs.run-security != 'false' }}
+      container-suffix: ruby
+      container-tag: 'latest'
     permissions:
       contents: read
       security-events: write
@@ -88,9 +94,13 @@ jobs:
     with:
       language: ruby
       versions: ${{ inputs.ruby-versions || '["3.2", "3.3", "3.4"]' }}
+      container-suffix: ruby
+      container-tag: 'latest'
 
   version:
     uses: vergil-project/vergil-actions/.github/workflows/ci-version-bump.yml@v2.0
     with:
       language: ruby
       run-release: ${{ inputs.run-release != 'false' }}
+      container-suffix: ruby
+      container-tag: 'latest'
