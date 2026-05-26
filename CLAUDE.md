@@ -103,11 +103,9 @@ translation between Ruby idioms and native MQSC parameter names.
 
 ### Standard Tooling
 
-```bash
-cd ../vergil-tooling && uv sync                                                # Install vergil-tooling
-export PATH="../vergil-tooling/.venv/bin:../vergil-tooling/scripts/bin:$PATH" # Put tools on PATH
-git config core.hooksPath ../vergil-tooling/scripts/lib/git-hooks               # Enable git hooks
-```
+The Claude Code PreToolUse hook guard (`.claude/hooks/guard.sh`)
+blocks raw `git` and `gh` commands — use `vrg-git` / `vrg-gh`
+wrappers.
 
 ### Environment Setup
 
