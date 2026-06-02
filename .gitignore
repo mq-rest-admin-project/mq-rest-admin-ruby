@@ -50,3 +50,6 @@ doc/yard/
 # RuboCop remote config cache
 .rubocop-https?--*
 .worktrees/
+
+# Vergil tooling scratch (PR/session working dir)
+.vergil/

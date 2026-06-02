@@ -30,6 +30,4 @@ jobs:
       language: ruby
       container-tag: "3.4"
       registry-publish: true
-    secrets:
-      APP_CLIENT_ID: ${{ secrets.APP_CLIENT_ID }}
-      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+    secrets: inherit
