@@ -63,7 +63,12 @@ module MQ
         def build_http(uri, timeout_seconds:, verify_tls:)
           http = Net::HTTP.new(uri.host, uri.port) # steep:ignore
           http.use_ssl = (uri.scheme == 'https')
-          http.verify_mode = verify_tls ? OpenSSL::SSL::VERIFY_PEER : OpenSSL::SSL::VERIFY_NONE
+          # Intentional, default-secure opt-out (verify_tls defaults to true); used for
+          # self-signed dev MQ. Strategic review of whether to keep this: see #153.
+          # rubocop:disable Layout/LineLength
+          # nosemgrep: ruby.lang.security.ssl-mode-no-verify
+          http.verify_mode = verify_tls ? OpenSSL::SSL::VERIFY_PEER : OpenSSL::SSL::VERIFY_NONE # codeql[rb/request-without-cert-validation]
+          # rubocop:enable Layout/LineLength
 
           if timeout_seconds
             http.open_timeout = timeout_seconds
