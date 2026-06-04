@@ -21,13 +21,17 @@ module MQ
       # Default transport implementation using Net::HTTP.
       #
       # Implements the duck-type transport contract:
-      # +#post_json(url, payload, headers:, timeout_seconds:, verify_tls:)+
+      # +#post_json(url, payload, headers:, timeout_seconds:)+
       class NetHTTPTransport
         # @param client_cert [String, nil] path to client certificate for mTLS
         # @param client_key [String, nil] path to client private key for mTLS
-        def initialize(client_cert: nil, client_key: nil)
+        # @param ca_file [String, nil] path to a PEM bundle of additional trusted
+        #   CA certificates (for internal or self-signed CAs). When nil, the
+        #   system trust store is used. TLS certificates are always verified.
+        def initialize(client_cert: nil, client_key: nil, ca_file: nil)
           @client_cert = client_cert
           @client_key = client_key
+          @ca_file = ca_file
         end
 
         # Send a JSON POST request and return the response.
@@ -36,12 +40,11 @@ module MQ
         # @param payload [Hash{String => Object}] the JSON request body
         # @param headers [Hash{String => String}] additional HTTP headers
         # @param timeout_seconds [Float, nil] request timeout in seconds
-        # @param verify_tls [Boolean] whether to verify TLS certificates
         # @return [TransportResponse] the HTTP response
         # @raise [TransportError] if the request fails at the network level
-        def post_json(url, payload, headers:, timeout_seconds:, verify_tls:)
+        def post_json(url, payload, headers:, timeout_seconds:)
           uri = URI.parse(url)
-          http = build_http(uri, timeout_seconds: timeout_seconds, verify_tls: verify_tls)
+          http = build_http(uri, timeout_seconds: timeout_seconds)
           request = build_request(uri, payload, headers)
 
           response = http.request(request)
@@ -60,10 +63,14 @@ module MQ
 
         private
 
-        def build_http(uri, timeout_seconds:, verify_tls:)
+        def build_http(uri, timeout_seconds:)
           http = Net::HTTP.new(uri.host, uri.port) # steep:ignore
           http.use_ssl = (uri.scheme == 'https')
-          http.verify_mode = verify_tls ? OpenSSL::SSL::VERIFY_PEER : OpenSSL::SSL::VERIFY_NONE
+          # TLS certificate verification is always enabled. To connect to a
+          # server using an internal or self-signed CA, pass that CA via the
+          # transport's ca_file (see Session tls_ca_file).
+          http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+          http.ca_file = @ca_file if @ca_file
 
           if timeout_seconds
             http.open_timeout = timeout_seconds

@@ -81,7 +81,7 @@ module MQ
           session = TestableSession.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: false, verify_tls: false
+            transport: transport, map_attributes: false
           )
           [session, transport]
         end
@@ -328,7 +328,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: false, verify_tls: false
+            transport: transport, map_attributes: false
           )
           # Access private method to verify it returns a number
           time = session.send(:clock_now)
@@ -342,7 +342,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: false, verify_tls: false
+            transport: transport, map_attributes: false
           )
           # Call with 0 to verify it runs without error
           session.send(:sleep_interval, 0)

@@ -31,8 +31,9 @@ require "mq/rest/admin"
 session = MQ::REST::Admin::Session.new(
   "https://localhost:9443/ibmmq/rest/v2",
   "QM1",
-  credentials: MQ::REST::Admin::BasicAuth.new(username: "mqadmin", password: "mqadmin"),
-  verify_tls: false
+  credentials: MQ::REST::Admin::BasicAuth.new(username: "mqadmin", password: "mqadmin")
+  # TLS is always verified. For a self-signed/dev queue manager, pass
+  # tls_ca_file: "/path/to/dev-ca.pem"
 )
 
 # Display queue manager attributes

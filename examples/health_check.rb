@@ -125,7 +125,7 @@ if __FILE__ == $PROGRAM_NAME
       username: ENV.fetch('MQ_ADMIN_USER', 'mqadmin'),
       password: ENV.fetch('MQ_ADMIN_PASSWORD', 'mqadmin')
     ),
-    verify_tls: false
+    tls_ca_file: ENV.fetch('MQ_REST_TLS_CA_FILE', nil)
   )
 
   qm2_url = ENV.fetch('MQ_REST_BASE_URL_QM2', nil)
@@ -136,7 +136,7 @@ if __FILE__ == $PROGRAM_NAME
         username: ENV.fetch('MQ_ADMIN_USER', 'mqadmin'),
         password: ENV.fetch('MQ_ADMIN_PASSWORD', 'mqadmin')
       ),
-      verify_tls: false
+      tls_ca_file: ENV.fetch('MQ_REST_TLS_CA_FILE', nil)
     )
   end
 

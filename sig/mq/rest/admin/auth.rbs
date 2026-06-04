@@ -37,8 +37,7 @@ module MQ
         String rest_base_url,
         LTPAAuth credentials,
         csrf_token: String?,
-        timeout_seconds: Float,
-        verify_tls: bool
+        timeout_seconds: Float
       ) -> [String, String]
 
       def self.extract_ltpa_token: (Hash[String, String] headers) -> [String, String]?
@@ -50,8 +49,7 @@ module MQ
         String rest_base_url,
         LTPAAuth credentials,
         csrf_token: String?,
-        timeout_seconds: Float,
-        verify_tls: bool
+        timeout_seconds: Float
       ) -> [String, String]
 
       def extract_ltpa_token: (Hash[String, String] headers) -> [String, String]?

@@ -185,7 +185,7 @@ module MQ
             assert_respond_to Session.new(
               'https://localhost:9443/ibmmq/rest/v2', 'QM1',
               credentials: BasicAuth.new(username: 'a', password: 'b'),
-              transport: MockTransport.new, map_attributes: false, verify_tls: false
+              transport: MockTransport.new, map_attributes: false
             ), method, "Session should respond to #{method}"
           end
         end

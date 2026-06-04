@@ -35,8 +35,7 @@ module MQ
       #   session = Session.new(
       #     "https://mq.example.com:9443/ibmmq/rest/v2",
       #     "QM1",
-      #     credentials: BasicAuth.new(username: "admin", password: "secret"),
-      #     verify_tls: false
+      #     credentials: BasicAuth.new(username: "admin", password: "secret")
       #   )
       #   queues = session.display_queue
       #
@@ -73,7 +72,9 @@ module MQ
         # @param qmgr_name [String] the queue manager name
         # @param credentials [BasicAuth, LTPAAuth, CertificateAuth] authentication credentials
         # @param gateway_qmgr [String, nil] optional gateway queue manager name
-        # @param verify_tls [Boolean] whether to verify TLS certificates
+        # @param tls_ca_file [String, nil] path to a PEM CA bundle to trust for
+        #   TLS verification (for internal or self-signed CAs); nil uses the
+        #   system trust store. TLS certificates are always verified.
         # @param timeout_seconds [Float] request timeout in seconds
         # @param map_attributes [Boolean] whether to auto-map snake_case to MQSC attributes
         # @param mapping_strict [Boolean] whether to raise on unknown mapping attributes
@@ -87,7 +88,7 @@ module MQ
           qmgr_name,
           credentials:,
           gateway_qmgr: nil,
-          verify_tls: true,
+          tls_ca_file: nil,
           timeout_seconds: 30.0,
           map_attributes: true,
           mapping_strict: true,
@@ -99,7 +100,7 @@ module MQ
           @rest_base_url = rest_base_url.chomp('/')
           @qmgr_name = qmgr_name
           @gateway_qmgr = gateway_qmgr
-          @verify_tls = verify_tls
+          @tls_ca_file = tls_ca_file
           @timeout_seconds = timeout_seconds
           @map_attributes = map_attributes
           @mapping_strict = mapping_strict
@@ -115,8 +116,7 @@ module MQ
             @ltpa_cookie_name, @ltpa_token = Admin.perform_ltpa_login(
               @transport, @rest_base_url, credentials,
               csrf_token: @csrf_token,
-              timeout_seconds: @timeout_seconds,
-              verify_tls: @verify_tls
+              timeout_seconds: @timeout_seconds
             )
           end
 
@@ -176,8 +176,7 @@ module MQ
           transport_response = @transport.post_json(
             build_mqsc_url, payload,
             headers: build_headers,
-            timeout_seconds: @timeout_seconds,
-            verify_tls: @verify_tls
+            timeout_seconds: @timeout_seconds
           )
           @last_http_status = transport_response.status_code
           @last_response_text = transport_response.body
@@ -361,13 +360,16 @@ module MQ
         end
 
         def resolve_transport(credentials, transport)
-          if credentials.is_a?(CertificateAuth) && transport.nil?
+          return transport if transport
+
+          if credentials.is_a?(CertificateAuth)
             return NetHTTPTransport.new(
               client_cert: credentials.cert_path,
-              client_key: credentials.key_path
+              client_key: credentials.key_path,
+              ca_file: @tls_ca_file
             )
           end
-          transport || NetHTTPTransport.new
+          NetHTTPTransport.new(ca_file: @tls_ca_file)
         end
       end
     end

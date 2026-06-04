@@ -4,6 +4,7 @@ return unless ENV['MQ_REST_ADMIN_RUN_INTEGRATION'] == '1'
 
 require 'minitest/autorun'
 require 'mq/rest/admin'
+require_relative 'dev_tls_trust'
 
 require_relative '../../examples/health_check'
 require_relative '../../examples/queue_depth_monitor'
@@ -13,27 +14,34 @@ require_relative '../../examples/dlq_inspector'
 require_relative '../../examples/queue_status'
 
 class ExamplesIntegrationTest < Minitest::Test
+  QM1_URL = ENV.fetch('MQ_REST_BASE_URL', 'https://localhost:9473/ibmmq/rest/v2')
+  QM2_URL = ENV.fetch('MQ_REST_BASE_URL_QM2', 'https://localhost:9474/ibmmq/rest/v2')
+
+  def dev_ca_file
+    @dev_ca_file ||= DevTLSTrust.ca_file_for([QM1_URL, QM2_URL])
+  end
+
   def qm1_session
     MQ::REST::Admin::Session.new(
-      ENV.fetch('MQ_REST_BASE_URL', 'https://localhost:9473/ibmmq/rest/v2'),
+      QM1_URL,
       'QM1',
       credentials: MQ::REST::Admin::BasicAuth.new(
         username: ENV.fetch('MQ_ADMIN_USER', 'mqadmin'),
         password: ENV.fetch('MQ_ADMIN_PASSWORD', 'mqadmin')
       ),
-      verify_tls: false
+      tls_ca_file: dev_ca_file
     )
   end
 
   def qm2_session
     MQ::REST::Admin::Session.new(
-      ENV.fetch('MQ_REST_BASE_URL_QM2', 'https://localhost:9474/ibmmq/rest/v2'),
+      QM2_URL,
       'QM2',
       credentials: MQ::REST::Admin::BasicAuth.new(
         username: ENV.fetch('MQ_ADMIN_USER', 'mqadmin'),
         password: ENV.fetch('MQ_ADMIN_PASSWORD', 'mqadmin')
       ),
-      verify_tls: false
+      tls_ca_file: dev_ca_file
     )
   end
 

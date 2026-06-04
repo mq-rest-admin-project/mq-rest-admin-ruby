@@ -24,7 +24,7 @@ module MQ
           String qmgr_name,
           credentials: credentials,
           ?gateway_qmgr: String?,
-          ?verify_tls: bool,
+          ?tls_ca_file: String?,
           ?timeout_seconds: Float,
           ?map_attributes: bool,
           ?mapping_strict: bool,

@@ -24,10 +24,10 @@ module MQ
           @calls = []
         end
 
-        def post_json(url, payload, headers:, timeout_seconds:, verify_tls:)
+        def post_json(url, payload, headers:, timeout_seconds:)
           @calls << {
             url: url, payload: payload, headers: headers,
-            timeout_seconds: timeout_seconds, verify_tls: verify_tls
+            timeout_seconds: timeout_seconds
           }
           if @call_index < @responses.length
             response = @responses[@call_index]
@@ -71,8 +71,7 @@ module MQ
           credentials: BasicAuth.new(username: 'admin', password: 'admin'),
           transport: transport,
           map_attributes: map_attributes,
-          mapping_strict: mapping_strict,
-          verify_tls: false
+          mapping_strict: mapping_strict
         )
         [session, transport]
       end

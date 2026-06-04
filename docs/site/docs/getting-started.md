@@ -34,7 +34,9 @@ session = MQ::REST::Admin::Session.new(
     username: 'mqadmin',
     password: 'mqadmin'
   ),
-  verify_tls: false  # for local development only
+  # TLS is always verified. For a self-signed/dev queue manager, trust its
+  # CA explicitly (nil uses the system trust store):
+  tls_ca_file: ENV.fetch('MQ_REST_TLS_CA_FILE', nil)
 )
 ```
 
@@ -157,8 +159,7 @@ session = MQ::REST::Admin::Session.new(
   'https://qm1-host:9443/ibmmq/rest/v2',
   'QM2',                                     # target queue manager
   credentials: MQ::REST::Admin::BasicAuth.new(username: 'mqadmin', password: 'mqadmin'),
-  gateway_qmgr: 'QM1',                       # local gateway queue manager
-  verify_tls: false
+  gateway_qmgr: 'QM1'                        # local gateway queue manager
 )
 
 qmgr = session.display_qmgr

@@ -51,10 +51,9 @@ module MQ
       # @param credentials [LTPAAuth] the LTPA credentials
       # @param csrf_token [String, nil] the CSRF token to include
       # @param timeout_seconds [Float] request timeout in seconds
-      # @param verify_tls [Boolean] whether to verify TLS certificates
       # @return [Array(String, String)] a [cookie_name, token_value] pair
       # @raise [AuthError] if login fails or no token is returned
-      def perform_ltpa_login(transport, rest_base_url, credentials, csrf_token:, timeout_seconds:, verify_tls:)
+      def perform_ltpa_login(transport, rest_base_url, credentials, csrf_token:, timeout_seconds:)
         login_url = "#{rest_base_url}#{LTPA_LOGIN_PATH}"
         headers = { 'Accept' => 'application/json' }
         headers['ibm-mq-rest-csrf-token'] = csrf_token unless csrf_token.nil?
@@ -62,7 +61,7 @@ module MQ
 
         response = transport.post_json(
           login_url, payload,
-          headers: headers, timeout_seconds: timeout_seconds, verify_tls: verify_tls
+          headers: headers, timeout_seconds: timeout_seconds
         )
 
         if response.status_code >= 400

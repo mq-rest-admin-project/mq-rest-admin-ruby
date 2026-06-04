@@ -44,12 +44,11 @@ Any object responding to `post_json` with the following signature can be used
 as a transport:
 
 ```ruby
-def post_json(url, payload, headers:, timeout_seconds:, verify_tls:)
+def post_json(url, payload, headers:, timeout_seconds:)
   # url: String - full URL
   # payload: Hash - JSON body to POST
   # headers: Hash - HTTP headers
   # timeout_seconds: Float or nil - request timeout
-  # verify_tls: Boolean - whether to verify TLS certificates
   #
   # Returns: TransportResponse
   # Raises: TransportError on network failure
@@ -80,7 +79,7 @@ class MockTransport
     @calls = []
   end
 
-  def post_json(url, payload, headers:, timeout_seconds:, verify_tls:)
+  def post_json(url, payload, headers:, timeout_seconds:)
     @calls << { url: url, payload: payload, headers: headers }
     response = @responses[@call_index]
     @call_index += 1

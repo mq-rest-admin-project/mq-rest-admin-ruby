@@ -14,7 +14,7 @@ session = MQ::REST::Admin::Session.new(
   qmgr_name,
   credentials:,
   gateway_qmgr: nil,
-  verify_tls: true,
+  tls_ca_file: nil,
   timeout_seconds: 30.0,
   map_attributes: true,
   mapping_strict: false,
@@ -33,7 +33,7 @@ session = MQ::REST::Admin::Session.new(
 | `qmgr_name` | `String` | (required) | Target queue manager name |
 | `credentials` | Auth object | (required) | `BasicAuth`, `LTPAAuth`, or `CertificateAuth` |
 | `gateway_qmgr` | `String` | `nil` | Gateway queue manager name for routing |
-| `verify_tls` | `Boolean` | `true` | Verify TLS certificates |
+| `tls_ca_file` | `String` | `nil` | PEM CA bundle to trust for TLS (nil = system store); certificates are always verified |
 | `timeout_seconds` | `Float` | `30.0` | HTTP request timeout |
 | `map_attributes` | `Boolean` | `true` | Enable attribute mapping |
 | `mapping_strict` | `Boolean` | `false` | Raise on unknown attributes |
