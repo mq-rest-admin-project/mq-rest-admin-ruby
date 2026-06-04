@@ -48,7 +48,7 @@ In Ruby, the transport is defined by a duck-type contract:
 
 ```ruby
 # Any object responding to #post_json with this signature
-def post_json(url, payload, headers:, timeout_seconds:, verify_tls:)
+def post_json(url, payload, headers:, timeout_seconds:)
   # Returns a TransportResponse
 end
 ```
@@ -69,7 +69,7 @@ class MockTransport
     @calls = []
   end
 
-  def post_json(url, payload, headers:, timeout_seconds:, verify_tls:)
+  def post_json(url, payload, headers:, timeout_seconds:)
     @calls << { url: url, payload: payload }
     response = @responses[@call_index]
     @call_index += 1

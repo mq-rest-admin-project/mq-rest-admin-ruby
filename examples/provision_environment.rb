@@ -184,7 +184,7 @@ if __FILE__ == $PROGRAM_NAME
       username: ENV.fetch('MQ_ADMIN_USER', 'mqadmin'),
       password: ENV.fetch('MQ_ADMIN_PASSWORD', 'mqadmin')
     ),
-    verify_tls: false
+    tls_ca_file: ENV.fetch('MQ_REST_TLS_CA_FILE', nil)
   )
 
   qm2_session = MQ::REST::Admin::Session.new(
@@ -194,7 +194,7 @@ if __FILE__ == $PROGRAM_NAME
       username: ENV.fetch('MQ_ADMIN_USER', 'mqadmin'),
       password: ENV.fetch('MQ_ADMIN_PASSWORD', 'mqadmin')
     ),
-    verify_tls: false
+    tls_ca_file: ENV.fetch('MQ_REST_TLS_CA_FILE', nil)
   )
 
   MQ::REST::Admin::Examples::ProvisionEnvironment.main(qm1_session, qm2_session)

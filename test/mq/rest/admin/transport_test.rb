@@ -67,8 +67,7 @@ module MQ
             "http://localhost:#{@port}/test",
             { 'key' => 'value' },
             headers: { 'Accept' => 'application/json' },
-            timeout_seconds: 5,
-            verify_tls: false
+            timeout_seconds: 5
           )
 
           assert_equal 200, response.status_code
@@ -84,8 +83,7 @@ module MQ
             "http://localhost:#{@port}/error",
             {},
             headers: {},
-            timeout_seconds: 5,
-            verify_tls: false
+            timeout_seconds: 5
           )
 
           assert_equal 500, response.status_code
@@ -98,8 +96,7 @@ module MQ
               'http://localhost:1/unreachable',
               {},
               headers: {},
-              timeout_seconds: 1,
-              verify_tls: false
+              timeout_seconds: 1
             )
           end
         end
@@ -110,8 +107,7 @@ module MQ
             "http://localhost:#{@port}/test",
             {},
             headers: {},
-            timeout_seconds: 5,
-            verify_tls: false
+            timeout_seconds: 5
           )
 
           assert_kind_of Hash, response.headers
@@ -124,8 +120,7 @@ module MQ
             "http://localhost:#{@port}/test",
             { 't' => 1 },
             headers: {},
-            timeout_seconds: nil,
-            verify_tls: false
+            timeout_seconds: nil
           )
 
           assert_equal 200, response.status_code
@@ -138,8 +133,7 @@ module MQ
               "http://localhost:#{@port}/test",
               {},
               headers: {},
-              timeout_seconds: 5,
-              verify_tls: false
+              timeout_seconds: 5
             )
           end
         end
@@ -151,24 +145,33 @@ module MQ
               "http://localhost:#{@port}/test",
               {},
               headers: {},
-              timeout_seconds: 5,
-              verify_tls: false
+              timeout_seconds: 5
             )
           end
         end
 
-        def test_post_json_verify_tls_true
-          # transport.rb:44 - verify_tls: true branch
-          transport = NetHTTPTransport.new
-          response = transport.post_json(
-            "http://localhost:#{@port}/test",
-            { 't' => 1 },
-            headers: {},
-            timeout_seconds: 5,
-            verify_tls: true
-          )
+        def test_post_json_with_ca_file
+          # transport.rb build_http - ca_file present branch (http.ca_file = @ca_file)
+          require 'tempfile'
+          cert, = create_self_signed_cert
 
-          assert_equal 200, response.status_code
+          ca_file = Tempfile.new(['ca', '.pem'])
+          begin
+            ca_file.write(cert.to_pem)
+            ca_file.close
+
+            transport = NetHTTPTransport.new(ca_file: ca_file.path)
+            response = transport.post_json(
+              "http://localhost:#{@port}/test",
+              { 't' => 1 },
+              headers: {},
+              timeout_seconds: 5
+            )
+
+            assert_equal 200, response.status_code
+          ensure
+            ca_file.unlink
+          end
         end
 
         def test_reraises_own_errors
@@ -181,8 +184,7 @@ module MQ
               'http://localhost:1/unreachable',
               {},
               headers: {},
-              timeout_seconds: 1,
-              verify_tls: false
+              timeout_seconds: 1
             )
           end
           assert_includes err.message, 'Failed to reach'
@@ -205,8 +207,7 @@ module MQ
               "http://localhost:#{@port}/test",
               { 't' => 1 },
               headers: {},
-              timeout_seconds: 5,
-              verify_tls: false
+              timeout_seconds: 5
             )
 
             assert_equal 200, response.status_code
@@ -230,8 +231,7 @@ module MQ
               "http://localhost:#{@port}/test",
               { 't' => 1 },
               headers: {},
-              timeout_seconds: 5,
-              verify_tls: false
+              timeout_seconds: 5
             )
 
             assert_equal 200, response.status_code

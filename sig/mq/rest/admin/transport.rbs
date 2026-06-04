@@ -11,19 +11,18 @@ module MQ
       end
 
       class NetHTTPTransport
-        def initialize: (?client_cert: String?, ?client_key: String?) -> void
+        def initialize: (?client_cert: String?, ?client_key: String?, ?ca_file: String?) -> void
 
         def post_json: (
           String url,
           Hash[String, untyped] payload,
           headers: Hash[String, String],
-          timeout_seconds: Float?,
-          verify_tls: bool
+          timeout_seconds: Float?
         ) -> TransportResponse
 
         private
 
-        def build_http: (URI::Generic uri, timeout_seconds: Float?, verify_tls: bool) -> Net::HTTP
+        def build_http: (URI::Generic uri, timeout_seconds: Float?) -> Net::HTTP
         def build_request: (URI::Generic uri, Hash[String, untyped] payload, Hash[String, String] headers) -> Net::HTTP::Post
         def extract_headers: (Net::HTTPResponse response) -> Hash[String, String]
       end

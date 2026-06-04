@@ -37,7 +37,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: LTPAAuth.new(username: 'user', password: 'pass'),
-            transport: transport, map_attributes: false, verify_tls: false
+            transport: transport, map_attributes: false
           )
           result = session.display_qmgr
 
@@ -59,7 +59,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: LTPAAuth.new(username: 'user', password: 'pass'),
-            transport: transport, map_attributes: false, verify_tls: false
+            transport: transport, map_attributes: false
           )
           result = session.display_qmgr
 
@@ -71,7 +71,18 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: CertificateAuth.new(cert_path: '/fake/cert.pem', key_path: '/fake/key.pem'),
-            map_attributes: false, verify_tls: false
+            map_attributes: false
+          )
+
+          assert_equal 'QM1', session.qmgr_name
+        end
+
+        def test_basic_auth_creates_default_transport
+          # resolve_transport: no transport + non-CertificateAuth fallthrough
+          session = Session.new(
+            'https://localhost:9443/ibmmq/rest/v2', 'QM1',
+            credentials: BasicAuth.new(username: 'admin', password: 'admin'),
+            map_attributes: false
           )
 
           assert_equal 'QM1', session.qmgr_name
@@ -86,7 +97,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: CertificateAuth.new(cert_path: '/fake/cert.pem'),
-            transport: transport, map_attributes: false, verify_tls: false
+            transport: transport, map_attributes: false
           )
           session.display_qmgr
           headers = transport.calls[0][:headers]
@@ -114,7 +125,7 @@ module MQ
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
             transport: transport2, map_attributes: false,
-            gateway_qmgr: 'GATEWAY1', verify_tls: false
+            gateway_qmgr: 'GATEWAY1'
           )
           session2.display_qmgr
 
@@ -134,7 +145,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport2, map_attributes: false, verify_tls: false,
+            transport: transport2, map_attributes: false,
             csrf_token: 'mytoken'
           )
           session.display_qmgr
@@ -150,7 +161,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: false, verify_tls: false,
+            transport: transport, map_attributes: false,
             csrf_token: nil
           )
           session.display_qmgr
@@ -287,7 +298,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2/', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: false, verify_tls: false
+            transport: transport, map_attributes: false
           )
           session.display_qmgr
 
@@ -340,7 +351,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: true, mapping_strict: false, verify_tls: false
+            transport: transport, map_attributes: true, mapping_strict: false
           )
           session.define_qlocal('MY.Q', request_parameters: { 'description' => 'test' })
           payload = transport.calls[0][:payload]
@@ -356,7 +367,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: true, mapping_strict: false, verify_tls: false
+            transport: transport, map_attributes: true, mapping_strict: false
           )
           result = session.display_queue(name: 'MY.Q', response_parameters: ['description'])
 
@@ -371,7 +382,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: true, mapping_strict: false, verify_tls: false
+            transport: transport, map_attributes: true, mapping_strict: false
           )
           result = session.display_queue(where: 'description LK test*')
 
@@ -402,7 +413,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: true, mapping_strict: false, verify_tls: false
+            transport: transport, map_attributes: true, mapping_strict: false
           )
           session.display_queue(where: 'description')
           payload = transport.calls[0][:payload]
@@ -427,8 +438,7 @@ module MQ
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
             transport: transport, map_attributes: true, mapping_strict: false,
-            mapping_overrides: overrides, mapping_overrides_mode: MAPPING_OVERRIDE_MERGE,
-            verify_tls: false
+            mapping_overrides: overrides, mapping_overrides_mode: MAPPING_OVERRIDE_MERGE
           )
           session.define_qlocal('MY.Q', request_parameters: { 'custom_attr' => 'val' })
           payload = transport.calls[0][:payload]
@@ -450,8 +460,7 @@ module MQ
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
             transport: transport, map_attributes: true, mapping_strict: false,
-            mapping_overrides: overrides, mapping_overrides_mode: MAPPING_OVERRIDE_REPLACE,
-            verify_tls: false
+            mapping_overrides: overrides, mapping_overrides_mode: MAPPING_OVERRIDE_REPLACE
           )
           result = session.display_queue(name: 'MY.Q')
 
@@ -466,7 +475,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: true, mapping_strict: false, verify_tls: false
+            transport: transport, map_attributes: true, mapping_strict: false
           )
           result = session.display_qmgr
 
@@ -481,7 +490,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: true, mapping_strict: false, verify_tls: false
+            transport: transport, map_attributes: true, mapping_strict: false
           )
           result = session.display_namelist('MY.NL')
 
@@ -505,8 +514,7 @@ module MQ
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
             transport: transport, map_attributes: true, mapping_strict: true,
-            mapping_overrides: overrides, mapping_overrides_mode: MAPPING_OVERRIDE_MERGE,
-            verify_tls: false
+            mapping_overrides: overrides, mapping_overrides_mode: MAPPING_OVERRIDE_MERGE
           )
           # display_queue resolves to "queue" qualifier which we removed
           # But MERGE adds overrides on top of base, which still has "queue"
@@ -525,7 +533,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: true, mapping_strict: true, verify_tls: false
+            transport: transport, map_attributes: true, mapping_strict: true
           )
           assert_raises(MappingError) do
             session.display_queue(name: 'MY.Q', response_parameters: ['totally_nonexistent_attr_xyz'])
@@ -540,7 +548,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: true, mapping_strict: false, verify_tls: false
+            transport: transport, map_attributes: true, mapping_strict: false
           )
           result = session.display_queue(name: 'MY.Q', response_parameters: ['description'])
 
@@ -555,7 +563,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: true, mapping_strict: true, verify_tls: false
+            transport: transport, map_attributes: true, mapping_strict: true
           )
           # Use a known mapped key so it succeeds in strict mode
           result = session.display_queue(where: 'description LK test*')
@@ -574,7 +582,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: true, mapping_strict: true, verify_tls: false
+            transport: transport, map_attributes: true, mapping_strict: true
           )
           assert_raises(MappingError) do
             session.display_queue(where: 'totally_nonexistent_key_xyz LK test*')
@@ -589,7 +597,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: true, mapping_strict: false, verify_tls: false
+            transport: transport, map_attributes: true, mapping_strict: false
           )
           result = session.display_queue(name: 'MY.Q')
 
@@ -618,7 +626,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: true, mapping_strict: false, verify_tls: false
+            transport: transport, map_attributes: true, mapping_strict: false
           )
           result = session.display_queue(name: 'MY.Q', response_parameters: ['ALL'])
 
@@ -633,7 +641,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: true, mapping_strict: false, verify_tls: false
+            transport: transport, map_attributes: true, mapping_strict: false
           )
           session.define_qlocal('MY.Q')
 
@@ -648,7 +656,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: true, mapping_strict: false, verify_tls: false
+            transport: transport, map_attributes: true, mapping_strict: false
           )
           session.display_queue(where: 'description LK test*')
           payload = transport.calls[0][:payload]
@@ -669,8 +677,7 @@ module MQ
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
             transport: transport, map_attributes: true, mapping_strict: false,
-            mapping_overrides: overrides, mapping_overrides_mode: MAPPING_OVERRIDE_MERGE,
-            verify_tls: false
+            mapping_overrides: overrides, mapping_overrides_mode: MAPPING_OVERRIDE_MERGE
           )
           result = session.display_queue(name: 'MY.Q', response_parameters: ['description'])
 
@@ -685,7 +692,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: true, mapping_strict: false, verify_tls: false
+            transport: transport, map_attributes: true, mapping_strict: false
           )
           result = session.display_queue(name: 'MY.Q', response_parameters: ['totally_nonexistent_attr_xyz'])
 
@@ -699,7 +706,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: true, mapping_strict: false, verify_tls: false
+            transport: transport, map_attributes: true, mapping_strict: false
           )
           # Use a qualifier not in DEFAULT_MAPPING_QUALIFIERS and not in command map
           result = session.send(:resolve_mapping_qualifier, 'DISPLAY', 'ZZZCUSTOM')
@@ -714,7 +721,7 @@ module MQ
             credentials: BasicAuth.new(username: 'a', password: 'b'),
             transport: transport, map_attributes: true, mapping_strict: true,
             mapping_overrides: { 'commands' => {}, 'qualifiers' => {} },
-            mapping_overrides_mode: MAPPING_OVERRIDE_MERGE, verify_tls: false
+            mapping_overrides_mode: MAPPING_OVERRIDE_MERGE
           )
           # Call map_response_parameters directly with an unknown qualifier
           assert_raises(MappingError) do
@@ -729,7 +736,7 @@ module MQ
             credentials: BasicAuth.new(username: 'a', password: 'b'),
             transport: transport, map_attributes: true, mapping_strict: false,
             mapping_overrides: { 'commands' => {}, 'qualifiers' => {} },
-            mapping_overrides_mode: MAPPING_OVERRIDE_MERGE, verify_tls: false
+            mapping_overrides_mode: MAPPING_OVERRIDE_MERGE
           )
           result = session.send(:map_response_parameters, 'DISPLAY', 'ZZZCUSTOM', 'zzzcustom', ['some_param'])
 
@@ -743,7 +750,7 @@ module MQ
             credentials: BasicAuth.new(username: 'a', password: 'b'),
             transport: transport, map_attributes: true, mapping_strict: true,
             mapping_overrides: { 'commands' => {}, 'qualifiers' => {} },
-            mapping_overrides_mode: MAPPING_OVERRIDE_MERGE, verify_tls: false
+            mapping_overrides_mode: MAPPING_OVERRIDE_MERGE
           )
           assert_raises(MappingError) do
             session.send(:map_where_keyword, 'some_key LK val',
@@ -758,7 +765,7 @@ module MQ
             credentials: BasicAuth.new(username: 'a', password: 'b'),
             transport: transport, map_attributes: true, mapping_strict: false,
             mapping_overrides: { 'commands' => {}, 'qualifiers' => {} },
-            mapping_overrides_mode: MAPPING_OVERRIDE_MERGE, verify_tls: false
+            mapping_overrides_mode: MAPPING_OVERRIDE_MERGE
           )
           mapping_data = session.instance_variable_get(:@mapping_data)
           result = session.send(:map_where_keyword, 'some_key LK val',
@@ -772,7 +779,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: true, mapping_strict: false, verify_tls: false
+            transport: transport, map_attributes: true, mapping_strict: false
           )
           mapping_data = session.instance_variable_get(:@mapping_data)
           result = session.send(:map_where_keyword, 'zzz_unknown_key LK val',
@@ -786,7 +793,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: true, mapping_strict: false, verify_tls: false
+            transport: transport, map_attributes: true, mapping_strict: false
           )
           macro_lookup = { 'events' => 'EVENTS' }
           combined_map = { 'description' => 'DESCR' }
@@ -846,7 +853,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: false, verify_tls: false
+            transport: transport, map_attributes: false
           )
           result = session.send(:extract_optional_int, 'not_an_int')
 
@@ -887,8 +894,7 @@ module MQ
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
             transport: transport, map_attributes: true, mapping_strict: false,
-            mapping_overrides: overrides, mapping_overrides_mode: MAPPING_OVERRIDE_MERGE,
-            verify_tls: false
+            mapping_overrides: overrides, mapping_overrides_mode: MAPPING_OVERRIDE_MERGE
           )
           result = session.send(:resolve_mapping_qualifier, 'DISPLAY', 'ZZZCUSTOM')
 
@@ -901,7 +907,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: false, verify_tls: false
+            transport: transport, map_attributes: false
           )
           result = session.send(:get_command_map, { 'commands' => 'not_a_hash' })
 
@@ -914,7 +920,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: false, verify_tls: false
+            transport: transport, map_attributes: false
           )
           data = {
             'commands' => { 'DISPLAY QUEUE' => { 'response_parameter_macros' => 'not_array' } },
@@ -931,7 +937,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: false, verify_tls: false
+            transport: transport, map_attributes: false
           )
           qualifier_entry = {
             'request_key_map' => 'not_hash',
@@ -948,7 +954,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: false, verify_tls: false
+            transport: transport, map_attributes: false
           )
           qualifier_entry = {
             'request_key_map' => { 'good' => 'GOOD', 123 => 'BAD', 'also_bad' => 456 },
@@ -967,7 +973,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: false, verify_tls: false
+            transport: transport, map_attributes: false
           )
           result = session.send(:get_qualifier_entry, 'queue', mapping_data: { 'qualifiers' => 'not_hash' })
 
@@ -981,7 +987,7 @@ module MQ
           session = Session.new(
             'https://localhost:9443/ibmmq/rest/v2', 'QM1',
             credentials: BasicAuth.new(username: 'a', password: 'b'),
-            transport: transport, map_attributes: false, verify_tls: false
+            transport: transport, map_attributes: false
           )
           # Use a qualifier that's in DEFAULT_MAPPING_QUALIFIERS but craft
           # a command that won't appear in the command map.

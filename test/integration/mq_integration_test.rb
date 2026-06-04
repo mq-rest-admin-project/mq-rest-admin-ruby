@@ -4,6 +4,7 @@ return unless ENV['MQ_REST_ADMIN_RUN_INTEGRATION'] == '1'
 
 require 'minitest/autorun'
 require 'mq/rest/admin'
+require_relative 'dev_tls_trust'
 
 # ---------------------------------------------------------------------------
 # Seeded object names (created by mq_seed.sh)
@@ -49,23 +50,21 @@ TEST_ENSURE_CHANNEL = 'DEV.ENSURE.CHL'
 IntegrationConfig = Data.define(
   :rest_base_url, :rest_base_url_qm2,
   :admin_user, :admin_password,
-  :qmgr_name, :qmgr_name_qm2, :verify_tls
+  :qmgr_name, :qmgr_name_qm2, :tls_ca_file
 )
 
 def load_integration_config
+  rest_base_url = ENV.fetch('MQ_REST_BASE_URL', 'https://localhost:9473/ibmmq/rest/v2')
+  rest_base_url_qm2 = ENV.fetch('MQ_REST_BASE_URL_QM2', 'https://localhost:9474/ibmmq/rest/v2')
   IntegrationConfig.new(
-    rest_base_url: ENV.fetch('MQ_REST_BASE_URL', 'https://localhost:9473/ibmmq/rest/v2'),
-    rest_base_url_qm2: ENV.fetch('MQ_REST_BASE_URL_QM2', 'https://localhost:9474/ibmmq/rest/v2'),
+    rest_base_url: rest_base_url,
+    rest_base_url_qm2: rest_base_url_qm2,
     admin_user: ENV.fetch('MQ_ADMIN_USER', 'mqadmin'),
     admin_password: ENV.fetch('MQ_ADMIN_PASSWORD', 'mqadmin'),
     qmgr_name: ENV.fetch('MQ_QMGR_NAME', 'QM1'),
     qmgr_name_qm2: ENV.fetch('MQ_QMGR_NAME_QM2', 'QM2'),
-    verify_tls: parse_bool?(ENV.fetch('MQ_REST_VERIFY_TLS', 'false'))
+    tls_ca_file: DevTLSTrust.ca_file_for([rest_base_url, rest_base_url_qm2])
   )
-end
-
-def parse_bool?(value)
-  %w[1 true yes on].include?(value.to_s.strip.downcase)
 end
 
 # ---------------------------------------------------------------------------
@@ -76,7 +75,7 @@ def build_session(config, map_attributes: true, mapping_strict: true)
   MQ::REST::Admin::Session.new(
     config.rest_base_url, config.qmgr_name,
     credentials: MQ::REST::Admin::BasicAuth.new(username: config.admin_user, password: config.admin_password),
-    verify_tls: config.verify_tls,
+    tls_ca_file: config.tls_ca_file,
     map_attributes: map_attributes,
     mapping_strict: mapping_strict
   )
@@ -87,8 +86,24 @@ def build_gateway_session(config, target_qmgr:, gateway_qmgr:, rest_base_url:)
     rest_base_url, target_qmgr,
     credentials: MQ::REST::Admin::BasicAuth.new(username: config.admin_user, password: config.admin_password),
     gateway_qmgr: gateway_qmgr,
-    verify_tls: config.verify_tls
+    tls_ca_file: config.tls_ca_file
   )
+end
+
+# Probe whether the MQ REST endpoint is up over verified TLS, dogfooding the
+# library's own secure path. Returns false on any failure so it can drive a
+# readiness poll without ever disabling certificate verification.
+def rest_ready?(base_url, qmgr, admin_user, admin_password)
+  session = MQ::REST::Admin::Session.new(
+    base_url, qmgr,
+    credentials: MQ::REST::Admin::BasicAuth.new(username: admin_user, password: admin_password),
+    tls_ca_file: DevTLSTrust.ca_file_for([base_url]),
+    timeout_seconds: 5
+  )
+  session.display_qmgr
+  true
+rescue StandardError
+  false
 end
 
 # ---------------------------------------------------------------------------
@@ -473,7 +488,7 @@ class MqIntegrationTest < Minitest::Test
     session = MQ::REST::Admin::Session.new(
       @config.rest_base_url, @config.qmgr_name,
       credentials: MQ::REST::Admin::LTPAAuth.new(username: @config.admin_user, password: @config.admin_password),
-      verify_tls: @config.verify_tls
+      tls_ca_file: @config.tls_ca_file
     )
 
     result = session.display_qmgr
@@ -619,29 +634,17 @@ class MqIntegrationTest < Minitest::Test
   end
 
   def wait_for_rest_ready
-    require 'net/http'
-    require 'uri'
-    require 'openssl'
-
-    config = load_integration_config
-    uri = URI.parse("#{config.rest_base_url}/admin/qmgr")
+    base_url = ENV.fetch('MQ_REST_BASE_URL', 'https://localhost:9473/ibmmq/rest/v2')
+    qmgr = ENV.fetch('MQ_QMGR_NAME', 'QM1')
+    user = ENV.fetch('MQ_ADMIN_USER', 'mqadmin')
+    pass = ENV.fetch('MQ_ADMIN_PASSWORD', 'mqadmin')
     deadline = Time.now + MQ_READY_TIMEOUT
 
     while Time.now < deadline
-      begin
-        http = Net::HTTP.new(uri.host, uri.port)
-        http.use_ssl = true
-        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-        http.open_timeout = 5
-        http.read_timeout = 5
-        req = Net::HTTP::Get.new(uri)
-        req.basic_auth(config.admin_user, config.admin_password)
-        req['ibm-mq-rest-csrf-token'] = 'blank'
-        response = http.request(req)
-        return if response.code == '200'
-      rescue StandardError
-        # REST endpoint not ready yet
-      end
+      # Cert extraction + a verified request only succeed once MQ is up, so this
+      # is both the readiness gate and proof that verified TLS works.
+      return if rest_ready?(base_url, qmgr, user, pass)
+
       sleep MQ_READY_SLEEP
     end
     raise "MQ REST endpoint not ready after #{MQ_READY_TIMEOUT}s"

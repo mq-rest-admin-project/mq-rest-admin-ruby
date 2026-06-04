@@ -49,7 +49,7 @@ module MQ
           cookie_name, token = Admin.perform_ltpa_login(
             transport, 'https://localhost:9443/ibmmq/rest/v2',
             LTPAAuth.new(username: 'user', password: 'pass'),
-            csrf_token: 'local', timeout_seconds: 30.0, verify_tls: false
+            csrf_token: 'local', timeout_seconds: 30.0
           )
 
           assert_equal 'LtpaToken2', cookie_name
@@ -67,7 +67,7 @@ module MQ
           cookie_name, token = Admin.perform_ltpa_login(
             transport, 'https://localhost:9443/ibmmq/rest/v2',
             LTPAAuth.new(username: 'user', password: 'pass'),
-            csrf_token: 'local', timeout_seconds: 30.0, verify_tls: false
+            csrf_token: 'local', timeout_seconds: 30.0
           )
 
           assert_equal 'LtpaToken2_abcdef', cookie_name
@@ -81,7 +81,7 @@ module MQ
             Admin.perform_ltpa_login(
               transport, 'https://localhost:9443',
               LTPAAuth.new(username: 'user', password: 'pass'),
-              csrf_token: nil, timeout_seconds: 30.0, verify_tls: false
+              csrf_token: nil, timeout_seconds: 30.0
             )
           end
           assert_includes err.message, 'LTPA login failed'
@@ -95,7 +95,7 @@ module MQ
             Admin.perform_ltpa_login(
               transport, 'https://localhost:9443',
               LTPAAuth.new(username: 'user', password: 'pass'),
-              csrf_token: 'local', timeout_seconds: 30.0, verify_tls: false
+              csrf_token: 'local', timeout_seconds: 30.0
             )
           end
           assert_includes err.message, 'no LtpaToken2 cookie'
@@ -110,7 +110,7 @@ module MQ
           cookie_name, token = Admin.perform_ltpa_login(
             transport, 'https://localhost:9443',
             LTPAAuth.new(username: 'u', password: 'p'),
-            csrf_token: nil, timeout_seconds: nil, verify_tls: true
+            csrf_token: nil, timeout_seconds: nil
           )
 
           assert_equal 'LtpaToken2', cookie_name
