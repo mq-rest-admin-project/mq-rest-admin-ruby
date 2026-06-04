@@ -919,14 +919,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../releases/v1.2.3/" class="md-nav__link">
+      <a href="../releases/v1.2.2/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    v1.2.3
+    1.2.2
   
 
     
@@ -947,14 +947,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../releases/v1.2.2/" class="md-nav__link">
+      <a href="../releases/v1.2.3/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    v1.2.2
+    1.2.2
   
 
     
@@ -982,7 +982,7 @@
   <span class="md-ellipsis">
     
   
-    v1.2.1
+    1.2.1
   
 
     
@@ -3343,7 +3343,7 @@ inject a mock transport to avoid network calls, making the entire command
 pipeline testable without an MQ server.</p>
 <p>In Ruby, the transport is defined by a duck-type contract:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Any object responding to #post_json with this signature</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">post_json</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="w"> </span><span class="n">payload</span><span class="p">,</span><span class="w"> </span><span class="ss">headers</span><span class="p">:,</span><span class="w"> </span><span class="ss">timeout_seconds</span><span class="p">:,</span><span class="w"> </span><span class="ss">verify_tls</span><span class="p">:)</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">post_json</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="w"> </span><span class="n">payload</span><span class="p">,</span><span class="w"> </span><span class="ss">headers</span><span class="p">:,</span><span class="w"> </span><span class="ss">timeout_seconds</span><span class="p">:)</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="c1"># Returns a TransportResponse</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="k">end</span>
 </code></pre></div>
@@ -3360,7 +3360,7 @@ handling.</p>
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="vi">@calls</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[]</span>
 <a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="k">end</span>
 <a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">post_json</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="w"> </span><span class="n">payload</span><span class="p">,</span><span class="w"> </span><span class="ss">headers</span><span class="p">:,</span><span class="w"> </span><span class="ss">timeout_seconds</span><span class="p">:,</span><span class="w"> </span><span class="ss">verify_tls</span><span class="p">:)</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nf">post_json</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="w"> </span><span class="n">payload</span><span class="p">,</span><span class="w"> </span><span class="ss">headers</span><span class="p">:,</span><span class="w"> </span><span class="ss">timeout_seconds</span><span class="p">:)</span>
 <a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="vi">@calls</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="ss">url</span><span class="p">:</span><span class="w"> </span><span class="n">url</span><span class="p">,</span><span class="w"> </span><span class="ss">payload</span><span class="p">:</span><span class="w"> </span><span class="n">payload</span><span class="w"> </span><span class="p">}</span>
 <a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vi">@responses</span><span class="o">[</span><span class="vi">@call_index</span><span class="o">]</span>
 <a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">    </span><span class="vi">@call_index</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span>

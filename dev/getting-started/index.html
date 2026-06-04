@@ -896,14 +896,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../releases/v1.2.3/" class="md-nav__link">
+      <a href="../releases/v1.2.2/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    v1.2.3
+    1.2.2
   
 
     
@@ -924,14 +924,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../releases/v1.2.2/" class="md-nav__link">
+      <a href="../releases/v1.2.3/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    v1.2.2
+    1.2.2
   
 
     
@@ -959,7 +959,7 @@
   <span class="md-ellipsis">
     
   
-    v1.2.1
+    1.2.1
   
 
     
@@ -3202,8 +3202,10 @@ REST API base URL, queue manager name, and credentials:</p>
 <a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="ss">username</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;mqadmin&#39;</span><span class="p">,</span>
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;mqadmin&#39;</span>
 <a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="p">),</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="ss">verify_tls</span><span class="p">:</span><span class="w"> </span><span class="kp">false</span><span class="w">  </span><span class="c1"># for local development only</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="p">)</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="c1"># TLS is always verified. For a self-signed/dev queue manager, trust its</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="c1"># CA explicitly (nil uses the system trust store):</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="ss">tls_ca_file</span><span class="p">:</span><span class="w"> </span><span class="no">ENV</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s1">&#39;MQ_REST_TLS_CA_FILE&#39;</span><span class="p">,</span><span class="w"> </span><span class="kp">nil</span><span class="p">)</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="running-a-command">Running a command<a class="headerlink" href="#running-a-command" title="Permanent link">&para;</a></h2>
 <p>Every MQSC command has a corresponding method on the session. Method names
@@ -3298,12 +3300,11 @@ routes the command:</p>
 <a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="s1">&#39;https://qm1-host:9443/ibmmq/rest/v2&#39;</span><span class="p">,</span>
 <a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="s1">&#39;QM2&#39;</span><span class="p">,</span><span class="w">                                     </span><span class="c1"># target queue manager</span>
 <a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span><span class="ss">credentials</span><span class="p">:</span><span class="w"> </span><span class="no">MQ</span><span class="o">::</span><span class="no">REST</span><span class="o">::</span><span class="no">Admin</span><span class="o">::</span><span class="no">BasicAuth</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">username</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;mqadmin&#39;</span><span class="p">,</span><span class="w"> </span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;mqadmin&#39;</span><span class="p">),</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">  </span><span class="ss">gateway_qmgr</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;QM1&#39;</span><span class="p">,</span><span class="w">                       </span><span class="c1"># local gateway queue manager</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">  </span><span class="ss">verify_tls</span><span class="p">:</span><span class="w"> </span><span class="kp">false</span>
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="p">)</span>
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>
-<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="n">qmgr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">session</span><span class="o">.</span><span class="n">display_qmgr</span>
-<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="c1"># Returns QM2&#39;s queue manager attributes, routed through QM1</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">  </span><span class="ss">gateway_qmgr</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;QM1&#39;</span><span class="w">                        </span><span class="c1"># local gateway queue manager</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="p">)</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="n">qmgr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">session</span><span class="o">.</span><span class="n">display_qmgr</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="c1"># Returns QM2&#39;s queue manager attributes, routed through QM1</span>
 </code></pre></div>
 <p>Prerequisites:</p>
 <ul>

@@ -734,14 +734,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../releases/v1.2.3/" class="md-nav__link">
+      <a href="../../releases/v1.2.2/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    v1.2.3
+    1.2.2
   
 
     
@@ -762,14 +762,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../releases/v1.2.2/" class="md-nav__link">
+      <a href="../../releases/v1.2.3/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    v1.2.2
+    1.2.2
   
 
     
@@ -797,7 +797,7 @@
   <span class="md-ellipsis">
     
   
-    v1.2.1
+    1.2.1
   
 
     
@@ -2878,15 +2878,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#git-hooks" class="md-nav__link">
+  <a href="#claude-code-hook-guard" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Git hooks
+        Claude Code hook guard
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Git hooks">
+    <nav class="md-nav" aria-label="Claude Code hook guard">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -3123,15 +3123,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#git-hooks" class="md-nav__link">
+  <a href="#claude-code-hook-guard" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Git hooks
+        Claude Code hook guard
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Git hooks">
+    <nav class="md-nav" aria-label="Claude Code hook guard">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -3313,10 +3313,10 @@ Local git hooks catch issues before code leaves the developer's machine,
 and CI pipelines enforce the same standards (plus additional checks) on
 every pull request. Pull requests cannot merge until all required jobs
 pass.</p>
-<h2 id="git-hooks">Git hooks<a class="headerlink" href="#git-hooks" title="Permanent link">&para;</a></h2>
-<p>Git hooks are stored in <code>scripts/git-hooks/</code> and activated with:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>config<span class="w"> </span>core.hooksPath<span class="w"> </span>scripts/git-hooks
-</code></pre></div>
+<h2 id="claude-code-hook-guard">Claude Code hook guard<a class="headerlink" href="#claude-code-hook-guard" title="Permanent link">&para;</a></h2>
+<p>The <code>.claude/hooks/guard.sh</code> PreToolUse hook blocks raw <code>git</code> and
+<code>gh</code> commands in AI agent sessions — all operations must go through
+the <code>vrg-git</code> / <code>vrg-gh</code> wrappers.</p>
 <h3 id="pre-commit">pre-commit<a class="headerlink" href="#pre-commit" title="Permanent link">&para;</a></h3>
 <p>The <code>pre-commit</code> hook runs before each commit and enforces:</p>
 <p><strong>Protected branch blocking</strong> — Commits directly to <code>main</code>, <code>develop</code>,
@@ -3351,7 +3351,7 @@ corresponding naming convention:</p>
 <p>The <code>commit-msg</code> hook runs after the commit message is written and
 validates two things:</p>
 <p><strong>Conventional Commits format</strong> — The subject line must match:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>&lt;type&gt;(optional-scope): &lt;description&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>&lt;type&gt;(optional-scope): &lt;description&gt;
 </code></pre></div>
 <p>Allowed types: <code>feat</code>, <code>fix</code>, <code>docs</code>, <code>style</code>, <code>refactor</code>, <code>test</code>, <code>chore</code>.</p>
 <p><strong>Co-author identity validation</strong> — If the commit includes

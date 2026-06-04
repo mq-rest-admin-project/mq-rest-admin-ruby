@@ -734,14 +734,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../releases/v1.2.3/" class="md-nav__link">
+      <a href="../../releases/v1.2.2/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    v1.2.3
+    1.2.2
   
 
     
@@ -762,14 +762,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../releases/v1.2.2/" class="md-nav__link">
+      <a href="../../releases/v1.2.3/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    v1.2.2
+    1.2.2
   
 
     
@@ -797,7 +797,7 @@
   <span class="md-ellipsis">
     
   
-    v1.2.1
+    1.2.1
   
 
     
@@ -2864,10 +2864,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#git-hooks" class="md-nav__link">
+  <a href="#claude-code-hook-guard" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Git hooks
+        Claude Code hook guard
       
     </span>
   </a>
@@ -3134,10 +3134,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#git-hooks" class="md-nav__link">
+  <a href="#claude-code-hook-guard" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Git hooks
+        Claude Code hook guard
       
     </span>
   </a>
@@ -3273,28 +3273,23 @@
 <h2 id="building-the-gem">Building the gem<a class="headerlink" href="#building-the-gem" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>gem<span class="w"> </span>build<span class="w"> </span>mq-rest-admin.gemspec
 </code></pre></div>
-<h2 id="git-hooks">Git hooks<a class="headerlink" href="#git-hooks" title="Permanent link">&para;</a></h2>
-<p>Enable repository git hooks before committing:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>git<span class="w"> </span>config<span class="w"> </span>core.hooksPath<span class="w"> </span>scripts/git-hooks
-</code></pre></div>
-<p>The hooks enforce:</p>
-<ul>
-<li><strong>pre-commit</strong>: Branch naming conventions and protected branch rules</li>
-<li><strong>commit-msg</strong>: Conventional Commits format and co-author trailer validation</li>
-</ul>
+<h2 id="claude-code-hook-guard">Claude Code hook guard<a class="headerlink" href="#claude-code-hook-guard" title="Permanent link">&para;</a></h2>
+<p>The <code>.claude/hooks/guard.sh</code> PreToolUse hook blocks raw <code>git</code> and
+<code>gh</code> commands in AI agent sessions — all operations must go through
+the <code>vrg-git</code> / <code>vrg-gh</code> wrappers.</p>
 <h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h2>
 <h3 id="local-setup">Local setup<a class="headerlink" href="#local-setup" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Set up shared fragments symlink</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>scripts/dev/docs-setup.sh
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Install MkDocs</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>pip<span class="w"> </span>install<span class="w"> </span>mkdocs-material
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="c1"># Build the documentation site</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>mkdocs<span class="w"> </span>build<span class="w"> </span>-f<span class="w"> </span>docs/site/mkdocs.yml
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="c1"># Serve locally with live reload</span>
-<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>mkdocs<span class="w"> </span>serve<span class="w"> </span>-f<span class="w"> </span>docs/site/mkdocs.yml
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Set up shared fragments symlink</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>scripts/dev/docs-setup.sh
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># Install MkDocs</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>pip<span class="w"> </span>install<span class="w"> </span>mkdocs-material
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c1"># Build the documentation site</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>mkdocs<span class="w"> </span>build<span class="w"> </span>-f<span class="w"> </span>docs/site/mkdocs.yml
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="c1"># Serve locally with live reload</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>mkdocs<span class="w"> </span>serve<span class="w"> </span>-f<span class="w"> </span>docs/site/mkdocs.yml
 </code></pre></div>
 
 
