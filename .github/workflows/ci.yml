@@ -27,7 +27,7 @@ concurrency:
 
 jobs:
   audit:
-    uses: vergil-project/vergil-actions/.github/workflows/ci-audit.yml@v2.0
+    uses: vergil-project/vergil-actions/.github/workflows/ci-audit.yml@v2.1
     with:
       language: ruby
       versions: ${{ inputs.ruby-versions || '["3.2", "3.3", "3.4"]' }}
@@ -69,13 +69,13 @@ jobs:
           bundle exec rake integration
 
   quality:
-    uses: vergil-project/vergil-actions/.github/workflows/ci-quality.yml@v2.0
+    uses: vergil-project/vergil-actions/.github/workflows/ci-quality.yml@v2.1
     with:
       language: ruby
       versions: ${{ inputs.ruby-versions || '["3.2", "3.3", "3.4"]' }}
 
   security:
-    uses: vergil-project/vergil-actions/.github/workflows/ci-security.yml@v2.0
+    uses: vergil-project/vergil-actions/.github/workflows/ci-security.yml@v2.1
     with:
       language: ruby
       run-standards: ${{ inputs.run-release != 'false' }}
@@ -85,14 +85,14 @@ jobs:
       security-events: write
 
   test:
-    uses: vergil-project/vergil-actions/.github/workflows/ci-test.yml@v2.0
+    uses: vergil-project/vergil-actions/.github/workflows/ci-test.yml@v2.1
     with:
       language: ruby
       versions: ${{ inputs.ruby-versions || '["3.2", "3.3", "3.4"]' }}
       container-suffix: ruby
 
   version:
-    uses: vergil-project/vergil-actions/.github/workflows/ci-version-bump.yml@v2.0
+    uses: vergil-project/vergil-actions/.github/workflows/ci-version-bump.yml@v2.1
     with:
       language: ruby
       run-release: ${{ inputs.run-release != 'false' }}
