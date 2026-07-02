@@ -21,7 +21,7 @@ names.
 gem install mq-rest-admin
 ```
 
-Requires Ruby 3.2+.
+Requires Ruby 3.3+.
 
 ## Quick start
 

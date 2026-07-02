@@ -4,7 +4,7 @@
 
 | Tool | Version | Purpose |
 | --- | --- | --- |
-| Ruby | 3.2+ | Build and test |
+| Ruby | 3.3+ | Build and test |
 | Bundler | Latest | Dependency management |
 | git | Latest | Version control |
 | Docker | Latest | Local MQ containers (integration tests) |

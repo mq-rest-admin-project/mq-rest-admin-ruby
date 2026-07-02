@@ -132,7 +132,7 @@ bundle install
 ### CI
 
 PR CI (`.github/workflows/ci.yml`) uses vergil-actions v2.0 reusable
-workflows for quality (lint, typecheck), unit tests (Ruby 3.2/3.3/3.4
+workflows for quality (lint, typecheck), unit tests (Ruby 3.3/3.4
 matrix), security (CodeQL, Trivy, Semgrep, standards), and release gates.
 Bespoke jobs handle dependency audit (license_finder with repo-specific
 decisions file) and integration tests (MQ containers).
@@ -194,7 +194,7 @@ Container details:
 ### Key design decisions
 
 - **Zero runtime dependencies** — uses `net/http` from stdlib
-- **Ruby 3.2+** — uses `Data.define` for immutable value objects
+- **Ruby 3.3+** — uses `Data.define` for immutable value objects
 - **Module mixins** — `Commands`, `Ensure`, `Sync` included into `Session`
 
 ## Key References

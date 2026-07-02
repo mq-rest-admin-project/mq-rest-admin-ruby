@@ -3,7 +3,7 @@
 ## Overview
 
 mq-rest-admin supports three authentication modes. All are immutable value
-objects created with `Data.define` (Ruby 3.2+).
+objects created with `Data.define` (Ruby 3.3+).
 
 ## CertificateAuth (mTLS)
 

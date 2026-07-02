@@ -28,7 +28,7 @@ vrg-docker-run -- vrg-validate
 
 Required for daily workflow:
 
-- Ruby 3.2+, Bundler
+- Ruby 3.3+, Bundler
 - `vrg-docker-run -- vrg-validate` (canonical validation)
 
 Required for integration testing:

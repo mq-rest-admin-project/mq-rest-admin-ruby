@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- **Ruby**: 3.2 or later
+- **Ruby**: 3.3 or later
 - **IBM MQ**: A running queue manager with the administrative REST API enabled
 
 ## Installation

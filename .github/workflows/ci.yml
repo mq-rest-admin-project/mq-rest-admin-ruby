@@ -7,10 +7,10 @@ on:
     inputs:
       ruby-versions:
         type: string
-        default: '["3.2", "3.3", "3.4"]'
+        default: '["3.3", "3.4"]'
       integration-matrix:
         type: string
-        default: '[{"ruby-version":"3.2","project-suffix":"3-2","qm1-rest-port":"9475","qm2-rest-port":"9476","qm1-mq-port":"1446","qm2-mq-port":"1447"},{"ruby-version":"3.3","project-suffix":"3-3","qm1-rest-port":"9477","qm2-rest-port":"9478","qm1-mq-port":"1448","qm2-mq-port":"1449"},{"ruby-version":"3.4","project-suffix":"3-4","qm1-rest-port":"9479","qm2-rest-port":"9480","qm1-mq-port":"1450","qm2-mq-port":"1451"}]'
+        default: '[{"ruby-version":"3.3","project-suffix":"3-3","qm1-rest-port":"9477","qm2-rest-port":"9478","qm1-mq-port":"1448","qm2-mq-port":"1449"},{"ruby-version":"3.4","project-suffix":"3-4","qm1-rest-port":"9479","qm2-rest-port":"9480","qm1-mq-port":"1450","qm2-mq-port":"1451"}]'
       run-security:
         type: string
         default: 'true'
@@ -31,7 +31,7 @@ jobs:
     uses: vergil-project/vergil-actions/.github/workflows/ci-audit.yml@v2.1
     with:
       language: ruby
-      versions: ${{ inputs.ruby-versions || '["3.2", "3.3", "3.4"]' }}
+      versions: ${{ inputs.ruby-versions || '["3.3", "3.4"]' }}
       container-suffix: ruby
 
   integration-tests:
@@ -40,7 +40,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include: ${{ fromJSON(inputs.integration-matrix || '[{"ruby-version":"3.2","project-suffix":"3-2","qm1-rest-port":"9475","qm2-rest-port":"9476","qm1-mq-port":"1446","qm2-mq-port":"1447"},{"ruby-version":"3.3","project-suffix":"3-3","qm1-rest-port":"9477","qm2-rest-port":"9478","qm1-mq-port":"1448","qm2-mq-port":"1449"},{"ruby-version":"3.4","project-suffix":"3-4","qm1-rest-port":"9479","qm2-rest-port":"9480","qm1-mq-port":"1450","qm2-mq-port":"1451"}]') }}
+        include: ${{ fromJSON(inputs.integration-matrix || '[{"ruby-version":"3.3","project-suffix":"3-3","qm1-rest-port":"9477","qm2-rest-port":"9478","qm1-mq-port":"1448","qm2-mq-port":"1449"},{"ruby-version":"3.4","project-suffix":"3-4","qm1-rest-port":"9479","qm2-rest-port":"9480","qm1-mq-port":"1450","qm2-mq-port":"1451"}]') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -73,7 +73,7 @@ jobs:
     uses: vergil-project/vergil-actions/.github/workflows/ci-quality.yml@v2.1
     with:
       language: ruby
-      versions: ${{ inputs.ruby-versions || '["3.2", "3.3", "3.4"]' }}
+      versions: ${{ inputs.ruby-versions || '["3.3", "3.4"]' }}
 
   security:
     uses: vergil-project/vergil-actions/.github/workflows/ci-security.yml@v2.1
@@ -90,7 +90,7 @@ jobs:
     uses: vergil-project/vergil-actions/.github/workflows/ci-test.yml@v2.1
     with:
       language: ruby
-      versions: ${{ inputs.ruby-versions || '["3.2", "3.3", "3.4"]' }}
+      versions: ${{ inputs.ruby-versions || '["3.3", "3.4"]' }}
       container-suffix: ruby
 
   version:
