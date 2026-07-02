@@ -2,12 +2,10 @@ plugins:
   - rubocop-minitest
   - rubocop-performance
   - rubocop-rake
-
-require:
   - rubocop-yard
 
 AllCops:
-  TargetRubyVersion: 3.2
+  TargetRubyVersion: 3.3
   NewCops: enable
   SuggestExtensions: false
 
