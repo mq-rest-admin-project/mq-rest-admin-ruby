@@ -2,8 +2,6 @@ plugins:
   - rubocop-minitest
   - rubocop-performance
   - rubocop-rake
-
-require:
   - rubocop-yard
 
 AllCops:
