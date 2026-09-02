@@ -1,0 +1,20 @@
+{
+  "schema_version": 2,
+  "issue": "165",
+  "branch": "feature/165-ci-sync",
+  "base": "origin/develop",
+  "status": "ready",
+  "created_at": "2026-09-02T18:24:44Z",
+  "updated_at": "2026-09-02T18:24:44Z",
+  "git": {
+    "base_sha": "8289286e0e817452606c4330f94723b80779fb8b",
+    "head_sha": "3db20a95c8980c0bad877806527410af4a097a0e"
+  },
+  "pr_metadata": {
+    "title": "refactor(ci): drop hardcoded matrix inputs from ci.yml",
+    "summary": "Make ci.yml a thin caller by dropping hardcoded matrix inputs, and bump json to >=2.19.9 (CVE-2026-54696) as the required security fix that gated the audit stage.",
+    "notes": "Fleet ci-sync (epic #338 Task 14 / #876). PR also bundles the required json>=2.19.9 bump (CVE-2026-54696) that gated the audit stage. NO secrets.",
+    "linkage": "Ref"
+  },
+  "submitted": null
+}
